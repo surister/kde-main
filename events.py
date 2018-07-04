@@ -4,10 +4,12 @@ from discord import Embed
 from discord.utils import find
 
 from asyncio import sleep
+from time import strftime
 
 from Bot.KDE.constants import *
 from Bot.KDE.constants import _helpo
-from Bot.KDE.json_commands import update_db, read_arg, str_to_dic
+from Bot.KDE.json_commands import update_db, read_arg, str_to_dic, get_json
+from Bot.KDE.extras import get_attacked_users
 
 
 class CommandErrorHandler:
@@ -22,8 +24,10 @@ class CommandErrorHandler:
         else:
             print(error)
 
-    async def on_event_error(self, error, ctx):
-        print(error)
+    @staticmethod
+    async def on_error(event):
+        print(event)
+
 
 class OnMessage:
     def __init__(self, bot):
@@ -34,18 +38,19 @@ class OnMessage:
             a = str_to_dic(message.content)
 
             server = list(a.keys())[0]
-
             tribu_atacante = list(a[server].keys())[0]
-
             atacador = a[server][tribu_atacante]
-
             codigo = list(a[server].keys())[1]
+            lista_atacados_steam_id = a[server][codigo]
 
-            atacado = a[server][codigo][0]
+            x = get_attacked_users(lista_atacados_steam_id, get_json())
 
-            fmt = f'En el servidor {server}, El usuario de la tribu {tribu_atacante}, {atacador} esta atacando a:' \
-                  f' {atacado} '
-            await self.bot.send_message(self.bot.get_channel("456407592621834251"), fmt)
+            if x:
+                for i in x:
+
+                    fmt = attack_message[read_arg(i, 'lan')]
+                    await self.bot.send_message(message.server.get_member_named(i),
+                    fmt.format(server, atacador, tribu_atacante, strftime('%I:%M%p %z on %b %d, %Y')))
 
     async def steam_message(self, user, lan):
         embed = Embed(title=welcome[lan], color=0x4FBCF3)
@@ -63,7 +68,6 @@ class OnMessage:
             else: await self.bot.send_message(user, embed=i)
 
     async def on_reaction_add(self, reaction, user):
-        print("s")
         if reaction.message.channel != self.bot.get_channel("461112442185973760"):
             return
 

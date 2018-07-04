@@ -49,4 +49,3 @@ Bot.run("NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg")
 # <a conocer -> lan = language, steam_id = steamid, ok = True/False -
 #TODO Comando !ayuda muestre la lista de comandos dependiendo del idioma del usuario que lo usa
 #
-

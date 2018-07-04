@@ -1,10 +1,12 @@
 import discord
 from discord.ext import commands
 from discord import Embed
-
+from asyncio import sleep
+from discord.utils import find
+from sys import exit
 
 from Bot.KDE.constants import steam_wrong_msg, okey_message
-from Bot.KDE.json_commands import update_db, read_arg, mod_update, read_all
+from Bot.KDE.json_commands import update_db, read_arg, mod_update, read_all, get_json
 from Bot.KDE.steam_request import steam_64id, id_parser
 
 
@@ -46,8 +48,8 @@ class Mod:
         await self.bot.say(read_all(user.name))
 
     @commands.check(is_mod)
-    @commands.command()
-    async def jsonupdate(self, user: discord.Member, to_update, new_info):
+    @commands.command(name='jsonupdate')
+    async def json_update(self, user: discord.Member, to_update, new_info):
         mod_update(user.name, to_update, new_info)
 
     @commands.check(is_mod)
@@ -67,21 +69,31 @@ class Mod:
         "\n <steam_id> -> la steam id"
         "\n <ok> -> Toma valor True cuando el usuario ha terminado con exito el registro, cambiarlo sin consultar"
                                                                                " a surister puede dar problemas")
+        embed.add_field(name="!getjson", value="Te da la db json entera")
         embed.add_field(name="!load <extension>", value="Sirve para cargar extensiones nuevas al bot")
         embed.add_field(name="!unload <extension>", value="Sirve para descargar extensiones ya cargadas al bot, se "
-                                                          "usar de manera maliciosa para cortar el funcionamiento del bot"
-                                                          " ,cuidado.")
-
+                                                    "usar de manera maliciosa para cortar el funcionamiento del bot"
+                                                    " ,cuidado.")
+        embed.add_field(name="!exit", value="Apaga el Bot")
         await self.bot.say(embed=embed)
 
+    @commands.check(is_mod)
+    @commands.command(pass_context=True)
+    async def rolerino(self, ctx):
+        new = find(lambda r: r.name.lower() == 'new', ctx.message.server.roles)
+        for i in ctx.message.server.members:
+            sleep(2)
+            print(i)
+            await self.bot.add_roles(i, new)
 
-class Users:
-
-    def __init__(self, bot):
-        self.bot = bot
-
+    @commands.check(is_mod)
     @commands.command(pass_context=True, no_pm=True)
     async def info(self, ctx, *, user: discord.Member = None):
+        x = get_json()
+        if user.name in list(x.keys()):
+            steamid = read_arg(user.name, "steam_id")
+        else:
+            steamid = 'No se puede encontrar steam id'
 
         author = ctx.message.author
         server = ctx.message.server
@@ -122,6 +134,7 @@ class Users:
         data.add_field(name="Joined Discord on", value=created_on)
         data.add_field(name="Joined this server on", value=joined_on)
         data.add_field(name="Roles", value=roles, inline=False)
+        data.add_field(name="Steam_Id", value=steamid, inline=False)
         data.set_footer(text="Member #{} | User ID:{}"
                              "" .format(member_number, user.id))
 
@@ -140,6 +153,23 @@ class Users:
             await self.bot.say("I need the `Embed links` permission "
                                "to send this")
 
+    @commands.check(is_mod)
+    @commands.command()
+    async def getjson(self):
+        await self.bot.say(get_json())
+
+    @commands.check(is_mod)
+    @commands.command(name='deljson')
+    async def del_user_json(self, user: discord.Member):
+        x = get_json()
+        x.pop(user.name)
+        await self.bot.say(f'He borrado a {user.name} de la base de datos')
+
+    @commands.check(is_mod)
+    @commands.command()
+    async def msg(self, channel: discord.Channel, *, message):
+        await self.bot.send_message(channel, message)
+
 
 class Loader:
     def __init__(self, bot):
@@ -157,6 +187,11 @@ class Loader:
     async def unload(self, ext):
         self.bot.unload_extension(ext)
         await self.bot.say("Unloaded extension {}".format(ext))
+
+    @commands.check(is_mod)
+    @commands.command(aliases=["exit", "cerrar"])
+    async def exi(self):
+        exit()
 
 
 class Login:
@@ -198,4 +233,3 @@ def setup(bot):
     bot.add_cog(Login(bot))
     bot.add_cog(Mod(bot))
     bot.add_cog(Loader(bot))
-    bot.add_cog(Users(bot))
