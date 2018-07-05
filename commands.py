@@ -1,11 +1,14 @@
 import discord
 from discord.ext import commands
 from discord import Embed
-from asyncio import sleep
 from discord.utils import find
+
+from asyncio import sleep
 from sys import exit
-from jason import dump
-from Bot.KDE.constants import steam_wrong_msg, okey_message
+from json import dump
+
+from Bot.KDE.ark_server_requests import main, cant_jugadores
+from Bot.KDE.constants import steam_wrong_msg, okey_message, kde_servers
 from Bot.KDE.json_commands import update_db, read_arg, mod_update, read_all, get_json
 from Bot.KDE.steam_request import steam_64id, id_parser
 
@@ -50,6 +53,9 @@ class Mod:
     @commands.check(is_mod)
     @commands.command(name='jsonupdate')
     async def json_update(self, user: discord.Member, to_update, new_info):
+        if to_update not in ['steam_id', 'ok', 'lan']:
+            await self.bot.say('Escribelo bien')
+            return
         mod_update(user.name, to_update, new_info)
 
     @commands.check(is_mod)
@@ -154,9 +160,11 @@ class Mod:
                                "to send this")
 
     @commands.check(is_mod)
-    @commands.command()
-    async def getjson(self):
-        await self.bot.say(get_json())
+    @commands.command(pass_context=True)
+    async def getjson(self, ctx):
+        with open('database.json', 'r') as db:
+            await self.bot.send_file(ctx.message.channel, db)
+            db.close()
 
     @commands.check(is_mod)
     @commands.command(name='deljson')
@@ -171,6 +179,15 @@ class Mod:
     @commands.command()
     async def msg(self, channel: discord.Channel, *, message):
         await self.bot.send_message(channel, message)
+
+    @commands.command()
+    async def server(self, num: int = None):
+        if num:
+            for w in main(kde_servers[num]):
+                await self.bot.say(w)
+        else:
+            x = cant_jugadores()
+            await self.bot.say("Hay {} jugadores conectados en KDE Servers".format(x))
 
 
 class Loader:

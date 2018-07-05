@@ -24,7 +24,7 @@ async def on_ready():
     fmt = "Conectado como: {0} \n Id: {1} \n It took to init the bot {2}".format(Bot.user.name, Bot.user.id, total_time)
     print("----------------------------\n", fmt, "\n----------------------------\n")
 
-Bot.run("NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg")
+Bot.run("NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg", reconnect=True)
 # Si tiene - es que esta hecho.
 # TODO Rangos y obtencion de inf básica
 # 1. Entra el usuario

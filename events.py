@@ -13,6 +13,7 @@ from Bot.KDE.extras import get_attacked_users
 
 
 class CommandErrorHandler:
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -81,7 +82,10 @@ class OnMessage:
             try:
                 if read_arg(user.name, "ok"):
                     new = find(lambda r: r.name.lower() == 'new', user.server.roles)
-                    lan_role = find(lambda r: r.name == read_arg(user.name, "lan"), user.server.roles)
+                    if read_arg(user.name, "lan") == 'EN':
+                        lan_role = find(lambda r: r.name == 'ENG', user.server.roles)
+                    else:
+                        lan_role = find(lambda r: r.name == 'ES', user.server.roles)
                     await self.bot.remove_roles(user, new)
                     await sleep(5)
                     await self.bot.add_roles(user, lan_role)
@@ -90,11 +94,10 @@ class OnMessage:
                 await self.bot.remove_reaction(x, "👍", user)
 
     async def on_member_join(self, member: discord.Member):
-        role = find(lambda r: r.name.lower() == 'kdeservers', member.server.roles)
+        role = find(lambda r: r.name.lower() == 'new', member.server.roles)
         if role:
             await self.bot.add_roles(member, role)
 
 
 def setup(bot):
-    bot.add_cog(CommandErrorHandler(bot))
     bot.add_cog(OnMessage(bot))
