@@ -4,7 +4,7 @@ from discord import Embed
 from asyncio import sleep
 from discord.utils import find
 from sys import exit
-
+from jason import dump
 from Bot.KDE.constants import steam_wrong_msg, okey_message
 from Bot.KDE.json_commands import update_db, read_arg, mod_update, read_all, get_json
 from Bot.KDE.steam_request import steam_64id, id_parser
@@ -161,8 +161,10 @@ class Mod:
     @commands.check(is_mod)
     @commands.command(name='deljson')
     async def del_user_json(self, user: discord.Member):
-        x = get_json()
-        x.pop(user.name)
+        a = get_json()
+        a.pop(user.name)
+        with open('database.json', 'w') as db:
+            dump(a, db)
         await self.bot.say(f'He borrado a {user.name} de la base de datos')
 
     @commands.check(is_mod)
