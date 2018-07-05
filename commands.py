@@ -7,7 +7,7 @@ from asyncio import sleep
 from sys import exit
 from json import dump
 
-from Bot.KDE.ark_server_requests import main, cant_jugadores
+
 from Bot.KDE.constants import steam_wrong_msg, okey_message, kde_servers
 from Bot.KDE.json_commands import update_db, read_arg, mod_update, read_all, get_json
 from Bot.KDE.steam_request import steam_64id, id_parser
@@ -180,14 +180,6 @@ class Mod:
     async def msg(self, channel: discord.Channel, *, message):
         await self.bot.send_message(channel, message)
 
-    @commands.command()
-    async def server(self, num: int = None):
-        if num:
-            for w in main(kde_servers[num]):
-                await self.bot.say(w)
-        else:
-            x = cant_jugadores()
-            await self.bot.say("Hay {} jugadores conectados en KDE Servers".format(x))
 
 
 class Loader:
