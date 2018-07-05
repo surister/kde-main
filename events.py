@@ -82,7 +82,6 @@ class OnMessage:
                 if read_arg(user.name, "ok"):
                     new = find(lambda r: r.name.lower() == 'new', user.server.roles)
                     lan_role = find(lambda r: r.name == read_arg(user.name, "lan"), user.server.roles)
-                    print(new, lan_role)
                     await self.bot.remove_roles(user, new)
                     await sleep(5)
                     await self.bot.add_roles(user, lan_role)
