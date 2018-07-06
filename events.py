@@ -9,7 +9,7 @@ from time import strftime
 from Bot.KDE.constants import *
 from Bot.KDE.constants import _helpo
 from Bot.KDE.json_commands import update_db, read_arg, str_to_dic, get_json
-from Bot.KDE.extras import get_attacked_users
+from Bot.KDE.extras import get_attacked_users, players_wh, switcher_wh, info_switcher_wh
 
 
 class CommandErrorHandler:
@@ -36,22 +36,28 @@ class OnMessage:
 
     async def on_message(self, message):
         if message.channel == self.bot.get_channel("462267741152346112"):
-            a = str_to_dic(message.content)
 
-            server = list(a.keys())[0]
-            tribu_atacante = list(a[server].keys())[0]
-            atacador = a[server][tribu_atacante]
-            codigo = list(a[server].keys())[1]
-            lista_atacados_steam_id = a[server][codigo]
+            b = str_to_dic(message.content)
+            final_switcher = switcher_wh(b)
+            server = server_wh(b)
+            time = strftime('%I:%M%p %z on %b %d %Y')
 
-            x = get_attacked_users(lista_atacados_steam_id, get_json())
+            if final_switcher == '1':
+                fmt = (server, info_switcher_wh(b)[1], info_switcher_wh(b)[0], time)
+            if final_switcher == '2':
+                fmt = (server, info_switcher_wh(b)[0], time)
+            if final_switcher == '3':
+                fmt = (server, info_switcher_wh(b)[1], info_switcher_wh(b)[0], time)
+            if final_switcher == '4':
+                fmt = (server, info_switcher_wh(b)[0], time)
+            if final_switcher == '5':
+                fmt = (server,info_switcher_wh(b)[0], time)
+            if final_switcher == '6':
+                fmt = (server, time)
 
-            if x:
-                for i in x:
-
-                    fmt = attack_message[read_arg(i, 'lan')]
-                    await self.bot.send_message(message.server.get_member_named(i),
-                    fmt.format(server, atacador, tribu_atacante, strftime('%I:%M%p %z on %b %d, %Y')))
+            for discord_users in get_attacked_users(players_wh(b), get_json()):
+                await self.bot.send_message(message.server.get_member_named(discord_users),
+                                            wb_msg[read_arg(discord_users, 'lan')][switcher_wh(b)].format(*fmt))
 
     async def steam_message(self, user, lan):
         embed = Embed(title=welcome[lan], color=0x4FBCF3)
@@ -66,7 +72,8 @@ class OnMessage:
         for i in to_send:
             if isinstance(i, str):
                 await self.bot.send_message(user, i)
-            else: await self.bot.send_message(user, embed=i)
+            else:
+                await self.bot.send_message(user, embed=i)
 
     async def on_reaction_add(self, reaction, user):
         if reaction.message.channel != self.bot.get_channel("461112442185973760"):
