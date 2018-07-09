@@ -51,11 +51,12 @@ class OnMessage:
             if final_switcher == '4':
                 fmt = (server, info_switcher_wh(b)[0], time)
             if final_switcher == '5':
-                fmt = (server,info_switcher_wh(b)[0], time)
+                fmt = (server, info_switcher_wh(b)[0], time)
             if final_switcher == '6':
                 fmt = (server, time)
 
             for discord_users in get_attacked_users(players_wh(b), get_json()):
+
                 await self.bot.send_message(message.server.get_member_named(discord_users),
                                             wb_msg[read_arg(discord_users, 'lan')][switcher_wh(b)].format(*fmt))
 

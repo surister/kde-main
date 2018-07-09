@@ -8,9 +8,11 @@ from sys import exit
 from json import dump
 
 from Bot.KDE.ark_server_requests import main, cant_jugadores
-from Bot.KDE.constants import steam_wrong_msg, okey_message, kde_servers
-from Bot.KDE.json_commands import update_db, read_arg, mod_update, read_all, get_json
-from Bot.KDE.steam_request import steam_64id, id_parser
+from Bot.KDE.constants import steam_wrong_msg, okey_message, kde_servers, steam_duplicity
+from Bot.KDE.json_commands import update_db, read_arg, mod_update, get_json, check_duplicity
+from Bot.KDE.steam_request import steam_64id, id_parser, steam_id_format_check
+from Bot.KDE.extras import total_registered_users, get_attacked_users
+from Bot.KDE.constants import __author__, __last_feature__, __version__
 
 
 def is_mod(ctx):
@@ -26,6 +28,13 @@ class Mod:
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command(name='bot')
+    async def bot_info(self):
+        embed = Embed(title="Info del bot")
+        embed.add_field(name="Autor: ", value=__author__)
+        embed.add_field(name="Version: ", value=__version__)
+        embed.add_field(name="Ultima feature: ", value= __last_feature__)
+        await self.bot.say(embed=embed)
     @commands.check(is_mod)
     @commands.command(name="ban", pass_context=True)
     async def ban_user(self, ctx, user: discord.Member, days: int=None, *, reason=None):
@@ -45,11 +54,17 @@ class Mod:
             await self.bot.delete_messages(mgs)
 
     @commands.check(is_mod)
-    @commands.command()
-    async def json(self, user: discord.Member):
-
-        await self.bot.say(read_all(user.name))
-
+    @commands.command(pass_context=True, name='json')
+    async def json_info(self, ctx, arg):
+        if arg == 'info':
+            await self.bot.say(total_registered_users())
+        elif steam_id_format_check(arg):
+            try:
+                await self.bot.say(ctx.message.server.get_member_named(get_attacked_users([arg], get_json())[0]).mention)
+            except IndexError:
+                await self.bot.say("No existe esa steam ID en la base de datos")
+        else:
+            await self.bot.say("Hmmm algo no cuadra, estas seguro que escribiste el parametro bien o que la steam 64 es suficientemente larga??")
     @commands.check(is_mod)
     @commands.command(name='jsonupdate')
     async def json_update(self, user: discord.Member, to_update, new_info):
@@ -66,8 +81,10 @@ class Mod:
         embed.add_field(name="!ban <@user> <dias>", value="<dias> 1-7, desde donde se les borran los mensajes, "
                                                         "el baneo de momento es permanente", inline=False)
         embed.add_field(name="!del <numero>", value="Borra un <numero> de mensajes del canal donde se use el comando ")
-        embed.add_field(name="!json <@usuario>", value="Te dice la informacion de <usuario> en formato json")
-        embed.add_field(name="jsonupdate <@usuario> <tag> <nueva_info>", value=""
+        embed.add_field(name="!json steam_id - !json info", value="Si el parametro es una steam id que esta en la base"
+                                                                  "de datos te da su discord id. \nSi pones info te"
+                                                                  " da la info de usuarios registrados. ")
+        embed.add_field(name="!jsonupdate <@usuario> <tag> <nueva_info>", value=""
         "Sirve para actualizar la información"
         "que tenemos de los usuarios a la fuerza"
         "\n tags:"
@@ -76,21 +93,16 @@ class Mod:
         "\n <ok> -> Toma valor True cuando el usuario ha terminado con exito el registro, cambiarlo sin consultar"
                                                                                " a surister puede dar problemas")
         embed.add_field(name="!getjson", value="Te da la db json entera")
+        embed.add_field(name="!info <@usuario>", value="Te da la info de ese usuario ")
+        embed.add_field(name="!server <OPCIONAL: numero de server>", value="Si no se especifica que server te da la "
+                                                                           "cantidad de usuarios totales, si se especifica"
+                                                                           "te dice cuantos hay en ese server y sus nombres")
         embed.add_field(name="!load <extension>", value="Sirve para cargar extensiones nuevas al bot")
         embed.add_field(name="!unload <extension>", value="Sirve para descargar extensiones ya cargadas al bot, se "
                                                     "usar de manera maliciosa para cortar el funcionamiento del bot"
                                                     " ,cuidado.")
         embed.add_field(name="!exit", value="Apaga el Bot")
         await self.bot.say(embed=embed)
-
-    @commands.check(is_mod)
-    @commands.command(pass_context=True)
-    async def rolerino(self, ctx):
-        new = find(lambda r: r.name.lower() == 'new', ctx.message.server.roles)
-        for i in ctx.message.server.members:
-            sleep(2)
-            print(i)
-            await self.bot.add_roles(i, new)
 
     @commands.check(is_mod)
     @commands.command(pass_context=True, no_pm=True)
@@ -153,11 +165,8 @@ class Mod:
         else:
             data.set_author(name=name)
 
-        try:
-            await self.bot.say(embed=data)
-        except discord.HTTPException:
-            await self.bot.say("I need the `Embed links` permission "
-                               "to send this")
+        await self.bot.say(embed=data)
+
     @commands.command()
     async def server(self, num: int = None):
         if num:
@@ -167,10 +176,9 @@ class Mod:
             x = cant_jugadores()
             await self.bot.say("Hay {} jugadores conectados en KDE Servers".format(x))
 
-
     @commands.check(is_mod)
-    @commands.command(pass_context=True)
-    async def getjson(self, ctx):
+    @commands.command(pass_context=True, name='getjson')
+    async def get_json(self, ctx):
         with open('database.json', 'r') as db:
             await self.bot.send_file(ctx.message.channel, db)
             db.close()
@@ -181,14 +189,13 @@ class Mod:
         a = get_json()
         a.pop(user.name)
         with open('database.json', 'w') as db:
-            dump(a, db)
+            dump(a, db, indent=3)
         await self.bot.say(f'He borrado a {user.name} de la base de datos')
 
     @commands.check(is_mod)
     @commands.command()
     async def msg(self, channel: discord.Channel, *, message):
         await self.bot.send_message(channel, message)
-
 
 
 class Loader:
@@ -242,9 +249,12 @@ class Login:
                 return
             x = steam_64id(id_parser(steam))
             if x:
-                update_db(author=ctx.message.author.name, steam=x)
-                await self.bot.say(okey_message[read_arg(ctx.message.author.name, "lan")])
-                mod_update(ctx.message.author.name, "ok", True)
+                if not check_duplicity(x):
+                    update_db(author=ctx.message.author.name, steam=x)
+                    await self.bot.say(okey_message[read_arg(ctx.message.author.name, "lan")])
+                    mod_update(ctx.message.author.name, "ok", True)
+                else:
+                    await self.bot.say(steam_duplicity[read_arg(ctx.message.author.name, "lan")])
             else:
                 await self.bot.say(steam_wrong_msg[read_arg(ctx.message.author.name, "lan")])
 

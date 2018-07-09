@@ -1,12 +1,8 @@
-import time
 from time import time
 from discord.ext.commands import Bot
 from discord import Game
-import discord
 
-client = discord.Client()
 Bot = Bot(command_prefix='!')
-
 
 @Bot.event
 async def on_ready():
@@ -42,10 +38,10 @@ Bot.run("NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg", reconnect
 # TODO Sistema de tickets
 # ...
 #TODO Comandos para el dia de ''apertura''
-# quitar kde servers y poner new a todo el mundo
+# quitar kde servers y poner new a todo el mundo -
 
 #TODO comando de basic info de servers para admins
 # Comando estilo !info @surister <a conocer> -
 # <a conocer -> lan = language, steam_id = steamid, ok = True/False -
 #TODO Comando !ayuda muestre la lista de comandos dependiendo del idioma del usuario que lo usa
-#
+# ??
