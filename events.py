@@ -9,7 +9,7 @@ from time import strftime
 from Bot.KDE.constants import *
 from Bot.KDE.constants import _helpo
 from Bot.KDE.json_commands import update_db, read_arg, str_to_dic, get_json
-from Bot.KDE.extras import get_attacked_users, players_wh, switcher_wh, info_switcher_wh
+from Bot.KDE.extras import get_attacked_users, players_wh, switcher_wh, info_switcher_wh, server_wh
 
 
 class CommandErrorHandler:
