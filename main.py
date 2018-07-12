@@ -5,7 +5,7 @@ from discord import Game
 Bot = Bot(command_prefix='!')
 Bot.remove_command('help')
 
-startup_extensions = ["cogs.commands",  "cogs.events", "cogs.tickets"]
+startup_extensions = ["cogs.commands",  "cogs.events", "cogs.tickets", "cogs.test"]
 
 
 @Bot.event
