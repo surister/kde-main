@@ -3,45 +3,55 @@ from discord.ext.commands import Bot
 from discord import Game
 
 Bot = Bot(command_prefix='!')
+Bot.remove_command('help')
+
+startup_extensions = ["cogs.commands",  "cogs.events", "cogs.tickets"]
+
 
 @Bot.event
 async def on_ready():
     await Bot.change_presence(game=Game(name="Ark Survival Evolved"))
     before = time()
-    Bot.remove_command('help')
-    a = Bot.get_channel('461112442185973760')
-    b = await Bot.get_message(a, '461136423345586186')
-    Bot.messages.append(b)
 
-    Bot.load_extension("commands")
-    Bot.load_extension("events")
+    #a = Bot.get_channel('461112442185973760')
+    #b = await Bot.get_message(a, '461136423345586186')
+    #Bot.messages.append(b)
+
     after = time()
-    total_time = after - before
-    fmt = "Conectado como: {0} \n Id: {1} \n It took to init the bot {2}".format(Bot.user.name, Bot.user.id, total_time)
+
+    fmt = "Conectado como: {0} \n Id: {1} \n It took to init the bot {2}".format(Bot.user.name, Bot.user.id, after - before)
     print("----------------------------\n", fmt, "\n----------------------------\n")
+sur = "NDQ2NzE4NDAzMjk0NTI3NDk5.DgMFLA.HTKDaxMMwUaRS49D4znianopPBk"
+# Bot.run("NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg", reconnect=True)
 
-Bot.run("NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg", reconnect=True)
-# Si tiene - es que esta hecho.
-# TODO Rangos y obtencion de inf básica
-# 1. Entra el usuario
-# 2. Tiene el rango new y solo puede ver el canal de welcome, donde tiene que elegir un idioma -
-# 3. Una vez que elige un idioma, el bot le manda por privado el tema de steam en su idioma -
-# 4. Comando de ayuda -
-# 5. Comando de steam que guarde en json la informacion -
-# 6. Una vez que manda el steam id, el bot le quita el rango de new y le pone el rango de su idioma -
 
-# TODO ..
-# 1. Chequeo que la id de steam este correctamente puesta -
-# 2. Chequeo que la id de steam exista -
-# 3. Añadir steam id al json -
+if __name__ == "__main__":
+    for extension in startup_extensions:
+        try:
+            Bot.load_extension(extension)
+        except Exception as e:
+            exc = '{}: {}'.format(type(e).__name__, e)
+            print('Failed to load extension {}\n{}'.format(extension, exc))
+
+Bot.run(sur)
+
 
 # TODO Sistema de tickets
-# ...
-#TODO Comandos para el dia de ''apertura''
-# quitar kde servers y poner new a todo el mundo -
+""" Inicio de ticket, el usuario manda un ticket en un canal donde estan las instrucciones y comendaciones
+# hay 5 tipos de tickets, {1: "Reporte de bug",
+#                       2: "Reporte de Usuario",
+#                       3: "Necesidad de asistencia especial",
+#                       4: "Reporte de abuso, cheat o hack",
+#                       5: "Sugerencia"
+#                       }
 
-#TODO comando de basic info de servers para admins
-# Comando estilo !info @surister <a conocer> -
-# <a conocer -> lan = language, steam_id = steamid, ok = True/False -
+No tiene porque ser asi de estricto, simplemente es para que nosotros al ver simplemente el numero sepamos de que va 
+mas o menos la cosa.
+
+Nosotros recibimos ese mensaje en un canal de tickets, donde al escribir algo por el estilo !abrir {codigo de ticket}
+empezamos una sesion con ese usuario, donde el bot le hablara por privado todo lo que nosotros le digamos (a su vez si el usuario nos dice algo el mensaje se editara
+añadiendo la información de dicho usuario) hasta que consideremos la ayuda como terminada y hagamos algo en plan !cerrar {codigo de ticket} donde el ticket y todo lo hablado
+se almacenara en formato json
+
 #TODO Comando !ayuda muestre la lista de comandos dependiendo del idioma del usuario que lo usa
-# ??
+# ?? """
