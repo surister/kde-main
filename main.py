@@ -22,7 +22,8 @@ async def on_ready():
     fmt = "Conectado como: {0} \n Id: {1} \n It took to init the bot {2}".format(Bot.user.name, Bot.user.id, after - before)
     print("----------------------------\n", fmt, "\n----------------------------\n")
 sur = "NDQ2NzE4NDAzMjk0NTI3NDk5.DgMFLA.HTKDaxMMwUaRS49D4znianopPBk"
-# Bot.run("NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg", reconnect=True)
+kde = "NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg"
+
 
 
 if __name__ == "__main__":
@@ -33,7 +34,7 @@ if __name__ == "__main__":
             exc = '{}: {}'.format(type(e).__name__, e)
             print('Failed to load extension {}\n{}'.format(extension, exc))
 
-Bot.run(sur)
+Bot.run(kde, reconnect=True)
 
 
 # TODO Sistema de tickets
