@@ -1,0 +1,19 @@
+a ver, el webhook ahora mismo te envia esto:
+: {'Test' : {'Tribe of Survivor': 'Survivor' , '-1' : ['76561198096697548', '76561198096697542']}}
+que traducido significa:
+Server / Tribu atacante / Nombre Player / DinoClass / [Steamids Array]
+si tribu atacante es negativo quiere decir que no tiene tribu
+si nombre player es negativo = es un dino
+si player = negativo & dinoclass = negativo , quiere decir que es un dino pero TIENE TRIBU (osea es un dino tameado)(edited)
+si tribu atacante = negativo & player = negativo, es un dino pero SALVAJE
+ves la logica?
+o lo cambio todo para que te sea mas sencillo?
+a priori hay muchas posibilidades, por eso te decia al principio (hace dias) de hacer un switcher para solo "recibir" la info necesaria del webhook, para cada caso y no recibir numeros en negativo.(edited)
+en plan:
+Si switcher es 1 = es un player con tribu
+Si switcher es 2 = es un player sin tribu
+Si switcher es 3 = es un dino tameado con tribu
+Si switcher es 4 = es un dino tameado sin tribu
+Si switcher es 5 = es un dino salvaje
+y solo incluyendo el numero al principio el bot puede ya determinar que lo siguiente son los datos pertinentes para formar la frase final para el usuario y el privado.
+nose si me explico
