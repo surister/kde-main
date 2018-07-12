@@ -109,19 +109,17 @@ class Mod:
 
     @commands.check(is_mod)
     @commands.command(pass_context=True, no_pm=True)
-    async def info(self, ctx, *, user: discord.Member = None):
+    async def info(self, ctx, *, user: discord.Member):
+
         x = get_json()
+
         if user.name in list(x.keys()):
-            steamid = read_arg(user.name, "steam_id")
-        else:
-            steamid = 'No se puede encontrar steam id'
-
-        author = ctx.message.author
-        server = ctx.message.server
-
-        if not user:
-            user = author
-
+            x = read_arg(user.name, 'steam_id')
+            if x != "":
+                steam_id = x
+            else:
+                steam_id = 'No tiene steam id' \
+                           ''
         roles = [x.name for x in user.roles if x.name != "@everyone"]
 
         joined_at = user.joined_at
@@ -129,8 +127,6 @@ class Mod:
         since_joined = (ctx.message.timestamp - joined_at).days
         user_joined = joined_at.strftime("%d %b %Y %H:%M")
         user_created = user.created_at.strftime("%d %b %Y %H:%M")
-        member_number = sorted(server.members,
-                               key=lambda m: m.joined_at).index(user) + 1
 
         created_on = "{}\n({} days ago)".format(user_created, since_created)
         joined_on = "{}\n({} days ago)".format(user_joined, since_joined)
@@ -145,7 +141,7 @@ class Mod:
             game = "Streaming: [{}]({})".format(user.game, user.game.url)
 
         if roles:
-            roles = sorted(roles, key=[x.name for x in server.role_hierarchy
+            roles = sorted(roles, key=[x.name for x in ctx.message.server.role_hierarchy
                                        if x.name != "@everyone"].index)
             roles = ", ".join(roles)
         else:
@@ -155,9 +151,8 @@ class Mod:
         data.add_field(name="Joined Discord on", value=created_on)
         data.add_field(name="Joined this server on", value=joined_on)
         data.add_field(name="Roles", value=roles, inline=False)
-        data.add_field(name="Steam_Id", value=steamid, inline=False)
-        data.set_footer(text="Member #{} | User ID:{}"
-                             "" .format(member_number, user.id))
+        data.add_field(name="Steam_Id", value=steam_id)
+        data.set_footer(text="User ID:{}".format(user.id))
 
         name = str(user)
         name = " ~ ".join((name, user.nick)) if user.nick else name
@@ -167,7 +162,6 @@ class Mod:
             data.set_thumbnail(url=user.avatar_url)
         else:
             data.set_author(name=name)
-
         await self.bot.say(embed=data)
 
     @commands.command()

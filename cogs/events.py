@@ -62,8 +62,6 @@ class OnMessage:
 
     async def steam_message(self, user, lan):
         embed = Embed(title=welcome[lan], color=0x4FBCF3)
-        print(welcome[lan])
-        print(lan)
         embed.add_field(name="Steam ID", value=pre_msg[lan], inline=False)
         embed.set_footer(text=gdrp_msg[lan])
         gdrp = Embed(title=n_help[lan], inline=False)

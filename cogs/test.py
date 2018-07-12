@@ -1,6 +1,6 @@
 from discord.ext import commands
 from discord import Embed
-
+from Bot.KDE.json_commands import read_db
 
 from Bot.KDE.constants import *
 
@@ -26,5 +26,9 @@ class Test:
         await self.bot.say(disc_message_3[lan])
 
 
+
+
+
 def setup(bot):
     bot.add_cog(Test(bot))
+

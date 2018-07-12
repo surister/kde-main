@@ -13,9 +13,9 @@ async def on_ready():
     await Bot.change_presence(game=Game(name="Ark Survival Evolved"))
     before = time()
 
-    #a = Bot.get_channel('461112442185973760')
-    #b = await Bot.get_message(a, '461136423345586186')
-    #Bot.messages.append(b)
+    a = Bot.get_channel('461112442185973760')
+    b = await Bot.get_message(a, '461136423345586186')
+    Bot.messages.append(b)
 
     after = time()
 
@@ -23,7 +23,6 @@ async def on_ready():
     print("----------------------------\n", fmt, "\n----------------------------\n")
 sur = "NDQ2NzE4NDAzMjk0NTI3NDk5.DgMFLA.HTKDaxMMwUaRS49D4znianopPBk"
 kde = "NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg"
-
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ from Bot.KDE.extras import ticket_num_generator
 from Bot.KDE.json_commands import read_arg
 from Bot.KDE.constants import ticket_memo
 
+
 class Tickets:
 
     def __init__(self, bot):
