@@ -11,7 +11,7 @@ from Bot.KDE.ark_server_requests import main, cant_jugadores
 from Bot.KDE.constants import steam_wrong_msg, okey_message, kde_servers, steam_duplicity
 from Bot.KDE.json_commands import update_db, read_arg, mod_update, get_json, check_duplicity
 from Bot.KDE.steam_request import steam_64id, id_parser, steam_id_format_check
-from Bot.KDE.extras import total_registered_users, get_attacked_users
+from Bot.KDE.extras import total_registered_users, get_attacked_users, has_steam_id
 from Bot.KDE.constants import __author__, __last_feature__, __version__
 
 
@@ -111,15 +111,6 @@ class Mod:
     @commands.command(pass_context=True, no_pm=True)
     async def info(self, ctx, *, user: discord.Member):
 
-        x = get_json()
-
-        if user.name in list(x.keys()):
-            x = read_arg(user.name, 'steam_id')
-            if x != "":
-                steam_id = x
-            else:
-                steam_id = 'No tiene steam id' \
-                           ''
         roles = [x.name for x in user.roles if x.name != "@everyone"]
 
         joined_at = user.joined_at
@@ -151,7 +142,7 @@ class Mod:
         data.add_field(name="Joined Discord on", value=created_on)
         data.add_field(name="Joined this server on", value=joined_on)
         data.add_field(name="Roles", value=roles, inline=False)
-        data.add_field(name="Steam_Id", value=steam_id)
+        data.add_field(name="Steam_Id", value=has_steam_id(user.name))
         data.set_footer(text="User ID:{}".format(user.id))
 
         name = str(user)
