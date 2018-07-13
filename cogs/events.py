@@ -22,8 +22,10 @@ class CommandErrorHandler:
             await self.bot.send_message(ctx.message.channel, "That command does not exist")
         elif isinstance(error, commands.MissingRequiredArgument):
             await self.bot.send_message(ctx.message.channel, "Missing required argument")
+        elif isinstance(error, ValueError):
+            await self.bot.send_message(ctx.message.channel, "!info @user")
         else:
-            print(error)
+            print(strftime('%c'), " ", error)
 
     @staticmethod
     async def on_error(event):

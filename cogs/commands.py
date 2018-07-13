@@ -163,7 +163,7 @@ class Mod:
                 for w in main(kde_servers[num]):
                     await self.bot.say(w)
             else:
-                await self.bot.say("Servers son de 1-10")
+                await self.bot.say("Servers son de 1-11")
         else:
             cantidad_jugadores = cant_jugadores()
             await self.bot.say(f"Hay {cantidad_jugadores} jugadores conectados en KDE Servers")
