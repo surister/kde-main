@@ -1,15 +1,14 @@
-import discord
-from discord.ext import commands
-from discord import Embed
-from discord.utils import find
-
 from asyncio import sleep
-from time import strftime
+
+from discord import Member
+from discord import Embed
+from discord.ext import commands
+from discord.utils import find
 
 from Bot.KDE.constants import *
 from Bot.KDE.constants import _helpo
-from Bot.KDE.json_commands import update_db, read_arg, str_to_dic, get_json
 from Bot.KDE.extras import get_attacked_users, players_wh, switcher_wh, info_switcher_wh, server_wh
+from Bot.KDE.json_commands import update_db, read_arg, str_to_dic, get_json
 
 
 class CommandErrorHandler:
@@ -25,7 +24,8 @@ class CommandErrorHandler:
         elif isinstance(error, ValueError):
             await self.bot.send_message(ctx.message.channel, "!info @user")
         else:
-            print(strftime('%c'), " ", error)
+            await self.bot.send_message(ctx.message.channel, error)
+            # print(strftime('%c'), " ", error)
 
     @staticmethod
     async def on_error(event):
@@ -43,7 +43,7 @@ class OnMessage:
             final_switcher = switcher_wh(b)
             server = server_wh(b)
             time = strftime('%I:%M%p %z on %b %d %Y')
-
+            fmt = ''
             if final_switcher == '1':
                 fmt = (server, info_switcher_wh(b)[1], info_switcher_wh(b)[0], time)
             if final_switcher == '2':
@@ -103,11 +103,16 @@ class OnMessage:
                 x = await self.bot.get_message(self.bot.get_channel("461112442185973760"), "461136423345586186")
                 await self.bot.remove_reaction(x, "👍", user)
 
-    async def on_member_join(self, member: discord.Member):
+    async def on_member_join(self, member: Member):
         role = find(lambda r: r.name.lower() == 'new', member.server.roles)
         if role:
             await self.bot.add_roles(member, role)
 
+    @staticmethod
+    async def on_resumed():
+        print("bots going down")
+
 
 def setup(bot):
     bot.add_cog(OnMessage(bot))
+    bot.add_cog(CommandErrorHandler(bot))

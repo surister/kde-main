@@ -22,6 +22,10 @@ class Tickets:
         embed.add_field(name=ticket_memo[users_language][_type], value=msg)
         await self.bot.say(embed=embed)
 
+    @commands.command(name="open")
+    async def open_ticket(self):
+        pass
+
 
 def setup(bot):
     bot.add_cog(Tickets(bot))

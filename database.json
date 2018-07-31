@@ -5,9 +5,9 @@
       "ok": false
    },
    "surister": {
-      "steam_id": "",
+      "steam_id": 76561198084992657,
       "lan": "ES",
-      "ok": false
+      "ok": true
    },
    "garch": {
       "steam_id": 76561198096697548,
@@ -635,9 +635,9 @@
       "ok": false
    },
    "Franky": {
-      "steam_id": "",
+      "steam_id": 76561198235935742,
       "lan": "ES",
-      "ok": false
+      "ok": true
    },
    "fogotyy \u30c3": {
       "steam_id": 76561198118199869,
@@ -740,9 +740,9 @@
       "ok": false
    },
    "Zhin": {
-      "steam_id": "",
+      "steam_id": 76561198321539157,
       "lan": "ES",
-      "ok": false
+      "ok": true
    },
    "danicaju": {
       "steam_id": "",
@@ -808,5 +808,75 @@
       "steam_id": 76561198389919430,
       "lan": "ES",
       "ok": true
+   },
+   "SAMURAIJE": {
+      "steam_id": 76561198299055132,
+      "lan": "ES",
+      "ok": true
+   },
+   "AstrObsCure": {
+      "steam_id": 76561198221530168,
+      "lan": "ES",
+      "ok": true
+   },
+   "ginex": {
+      "steam_id": 76561198316509857,
+      "lan": "ES",
+      "ok": true
+   },
+   "-pX-": {
+      "steam_id": 76561198272810977,
+      "lan": "EN",
+      "ok": true
+   },
+   "FuegoDeOro": {
+      "steam_id": 76561198343695646,
+      "lan": "ES",
+      "ok": true
+   },
+   "Dani": {
+      "steam_id": "",
+      "lan": "ES",
+      "ok": false
+   },
+   "Tekfly": {
+      "steam_id": 76561198125700497,
+      "lan": "EN",
+      "ok": true
+   },
+   "Este no es Pelu": {
+      "steam_id": "",
+      "lan": "ES",
+      "ok": false
+   },
+   "lau": {
+      "steam_id": 76561198202584850,
+      "lan": "EN",
+      "ok": true
+   },
+   "\u272aThe\u272a\u270cPure\u270c\u2620Wolf\u2620": {
+      "steam_id": "",
+      "lan": "EN",
+      "ok": false
+   },
+   "arri148": {
+      "steam_id": 76561198312880069,
+      "lan": "ES",
+      "ok": true
+   },
+   "Knoky": {
+      "steam_id": "",
+      "lan": "EN",
+      "ok": false
+   },
+   "LordDani": {
+      "steam_id": 76561198028823733,
+      "lan": "ES",
+      "ok": true
+   },
+   "\u05d0\u05d5\u05e4\u05d9\u05e8 \u05e1\u05d1\u05d2": {
+      "steam_id": "",
+      "lan": "EN",
+      "ok": false
    }
 }

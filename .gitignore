@@ -2,4 +2,5 @@
 *.xml
 *.xml
 *.pyc
+.venv/
 venv/

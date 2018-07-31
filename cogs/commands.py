@@ -1,6 +1,5 @@
 from sys import exit
 from json import dump
-from time import strftime
 
 import discord
 from discord.ext import commands
@@ -13,7 +12,8 @@ from Bot.KDE.json_commands import update_db, read_arg, mod_update, get_json, che
 from Bot.KDE.steam_request import steam_64id, id_parser, steam_id_format_check
 from Bot.KDE.extras import total_registered_users, get_attacked_users, has_steam_id
 from Bot.KDE.constants import __author__, __last_feature__, __version__
-
+from Bot.KDE.json_commands_changelog import real_path, write_changelog, read_changelog_version
+from Bot.KDE.decorators import deco, asdf
 
 def is_mod(ctx):
 
@@ -28,13 +28,40 @@ class Mod:
     def __init__(self, bot):
         self.bot = bot
 
+    @asdf
+    async def msg_help(self):
+        await self.bot.say('nibba')
+
+    @commands.command(pass_context=True)
+    @deco()
+    async def test(self, ctx):
+        await self.msg_help()
+
+    @commands.command()
+    async def v(self, arg):
+        await self.bot.say(read_changelog_version(arg))
+
+    @commands.check(is_mod)
+    @commands.command(pass_context=True)
+    async def perms(self, ctx):
+        embed = Embed(title='__**Permissions**__')
+
+        for perm in ctx.message.server.me.server_permissions:
+            if perm[1]:
+                embed.add_field(name=perm[0], value=':o:')
+            else:
+                embed.add_field(name=perm[0], value=':x:')
+        await self.bot.say(embed=embed)
+
+    @commands.check(is_mod)
     @commands.command(name='bot')
     async def bot_info(self):
-        embed = Embed(title="Info del bot")
-        embed.add_field(name="Autor: ", value=__author__)
-        embed.add_field(name="Version: ", value=__version__)
-        embed.add_field(name="Ultima feature: ", value=__last_feature__)
-        await self.bot.say(embed=embed)
+            embed = Embed(title="Info del bot")
+            embed.add_field(name="Autor: ", value=__author__)
+            embed.add_field(name="Version: ", value=__version__)
+            embed.add_field(name="Ultima feature: ", value=__last_feature__)
+            await self.bot.say(embed=embed)
+            write_changelog(__version__, __last_feature__)
 
     @commands.check(is_mod)
     @commands.command(name="ban", pass_context=True)
@@ -155,6 +182,7 @@ class Mod:
             data.set_author(name=name)
         await self.bot.say(embed=data)
 
+    @commands.check(is_mod)
     @commands.command()
     async def server(self, num: int = None):
         if num:
@@ -169,11 +197,14 @@ class Mod:
             await self.bot.say(f"Hay {cantidad_jugadores} jugadores conectados en KDE Servers")
 
     @commands.check(is_mod)
-    @commands.command(pass_context=True, name='getjson')
-    async def get_json(self, ctx):
-        with open('database.json', 'r') as db:
-            await self.bot.send_file(ctx.message.channel, db)
-            db.close()
+    @commands.command(pass_context=True, name='get')
+    async def get_files(self, ctx, arg):
+        if arg == 'json':
+            with open('database.json', 'r') as db:
+                await self.bot.send_file(ctx.message.channel, db)
+        elif arg == 'changelog':
+            with open(real_path) as changelog:
+                await self.bot.send_file(ctx.message.channel, changelog)
 
     @commands.check(is_mod)
     @commands.command(name='deljson')
