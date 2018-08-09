@@ -1,45 +1,39 @@
-from time import time
-
-from discord import Game
+import asyncio
+from time import strftime
+from discord import Embed
 from discord.ext.commands import Bot
 
-from Bot.KDE.constants import __version__
+from Bot.KDE.login import Login
+from Bot.KDE.cogs_manager import load_cogs
+from Bot.KDE.constants import status_channels, kde_servers
+from Bot.KDE.ark_server_requests import main
 
-Bot = Bot(command_prefix='!')
-Bot.remove_command('help')
-
-
-@Bot.event
-async def on_ready():
-    await Bot.change_presence(game=Game(name="Ark Survival Evolved"))
-    before = time()
-
-    a = Bot.get_channel('461112442185973760')
-    b = await Bot.get_message(a, '461136423345586186')
-    Bot.messages.append(b)
-
-    after = time()
-    s = '\n----------------------------\n'
-    fmt = "--v:" + __version__ + "\nConectado como: {0} \n Id: {1} \n It took to init the bot {2}".format(Bot.user.name,
-                                                                                                          Bot.user.id,
-                                                                                                          after - before)
-    print(s, fmt, s)
+bot = Bot(command_prefix='!')
+bot.remove_command('help')
 
 
-sur = "NDQ2NzE4NDAzMjk0NTI3NDk5.DgMFLA.HTKDaxMMwUaRS49D4znianopPBk"
-kde = "NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg"
+async def my_background_task():
+    await bot.wait_until_ready()
 
-startup_extensions = ["cogs.commands", "cogs.events", "cogs.tickets", "cogs.test"]
+    while not bot.is_closed:
+        x = [main(server, True) for server in kde_servers.values()]
+
+        status = Embed(title='__**Server Status**__', )
+        status.set_footer(text=f'Last check was -> {strftime("%c")}  - Every/Cada : 5 minutes')
+        for new in x:
+            status.add_field(name=new, value='\u200b', inline=True)
+
+        for channel, message in status_channels.items():
+            m = await bot.get_message(bot.get_channel(channel), message)
+            await bot.edit_message(m, embed=status)
+        await asyncio.sleep(300)
+
 
 if __name__ == "__main__":
-    for extension in startup_extensions:
-        try:
-            Bot.load_extension(extension)
-        except Exception as e:
-            exc = '{}: {}'.format(type(e).__name__, e)
-            print('Failed to load extension {}\n{}'.format(extension, exc))
+    load_cogs(bot)
+    bot.loop.create_task(my_background_task())
+    bot.run(Login.kde, reconnect=True)
 
-Bot.run(kde, reconnect=True)
 
 # TODO Mejorar mensaje steam registro --
 # Solucionar gif --

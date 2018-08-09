@@ -15,6 +15,7 @@ from Bot.KDE.constants import __author__, __last_feature__, __version__
 from Bot.KDE.json_commands_changelog import real_path, write_changelog, read_changelog_version
 from Bot.KDE.decorators import deco, asdf
 
+
 def is_mod(ctx):
 
     role_list = [x.name.lower() for x in ctx.message.author.roles]
@@ -34,8 +35,12 @@ class Mod:
 
     @commands.command(pass_context=True)
     @deco()
-    async def test(self, ctx):
-        await self.msg_help()
+    async def test(self):
+        cn = ['476475717849317399', '476475751084851232']
+        for i in cn:
+
+            await self.bot.send_message(self.bot.get_channel(i), 'setting up')
+        # await self.bot.get_message(self.bot.get_channel('476475717849317399'), )
 
     @commands.command()
     async def v(self, arg):

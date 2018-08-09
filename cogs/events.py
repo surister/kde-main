@@ -1,14 +1,38 @@
 from asyncio import sleep
+from time import time
 
-from discord import Member
-from discord import Embed
+
+from discord import Member, Embed, Game
 from discord.ext import commands
 from discord.utils import find
 
 from Bot.KDE.constants import *
+from Bot.KDE.constants import __version__
 from Bot.KDE.constants import _helpo
 from Bot.KDE.extras import get_attacked_users, players_wh, switcher_wh, info_switcher_wh, server_wh
 from Bot.KDE.json_commands import update_db, read_arg, str_to_dic, get_json
+
+
+class OnReady:
+
+    def __init__(self, bot):
+        self.bot = bot
+
+    async def on_ready(self):
+        await self.bot.change_presence(game=Game(name="Ark Survival Evolved"))
+        before = time()
+
+        a = self.bot.get_channel('461112442185973760')
+        b = await self.bot.get_message(a, '461136423345586186')
+        self.bot.messages.append(b)
+
+        after = time()
+        s = '\n----------------------------\n'
+        fmt = "--v:" + __version__ + "\nConectado como: {0} \n Id: {1} \n It took to init the bot {2}".format(
+            self.bot.user.name,
+            self.bot.user.id,
+            after - before)
+        print(s, fmt, s)
 
 
 class CommandErrorHandler:
@@ -32,7 +56,7 @@ class CommandErrorHandler:
         print(event)
 
 
-class OnMessage:
+class OnMessageVariable:
     def __init__(self, bot):
         self.bot = bot
 
@@ -43,7 +67,7 @@ class OnMessage:
             final_switcher = switcher_wh(b)
             server = server_wh(b)
             time = strftime('%I:%M%p %z on %b %d %Y')
-            fmt = ''
+
             if final_switcher == '1':
                 fmt = (server, info_switcher_wh(b)[1], info_switcher_wh(b)[0], time)
             if final_switcher == '2':
@@ -114,5 +138,6 @@ class OnMessage:
 
 
 def setup(bot):
-    bot.add_cog(OnMessage(bot))
+    bot.add_cog(OnMessageVariable(bot))
     bot.add_cog(CommandErrorHandler(bot))
+    bot.add_cog(OnReady(bot))

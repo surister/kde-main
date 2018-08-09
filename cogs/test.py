@@ -26,9 +26,5 @@ class Test:
         await self.bot.say(disc_message_3[lan])
 
 
-
-
-
 def setup(bot):
     bot.add_cog(Test(bot))
-

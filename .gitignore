@@ -3,4 +3,6 @@
 *.xml
 *.pyc
 .venv/
+*.venv/
 venv/
+/venv

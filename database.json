@@ -878,5 +878,25 @@
       "steam_id": "",
       "lan": "EN",
       "ok": false
+   },
+   "Golfo (Movil)": {
+      "steam_id": "",
+      "lan": "ES",
+      "ok": false
+   },
+   "Pelayori": {
+      "steam_id": "",
+      "lan": "ES",
+      "ok": false
+   },
+   "ElPocolo": {
+      "steam_id": 76561198258355168,
+      "lan": "ES",
+      "ok": true
+   },
+   "SrFran": {
+      "steam_id": "",
+      "lan": "ES",
+      "ok": false
    }
 }
