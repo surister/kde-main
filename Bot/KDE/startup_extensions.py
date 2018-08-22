@@ -1,6 +1,6 @@
 import os
 
-from Bot.KDE.paths import folder_path
+from Bot.KDE.paths import cogs_path
 
 
 class StartupExtension:
@@ -10,7 +10,7 @@ class StartupExtension:
     @classmethod
     def to_array(cls):
 
-        return [f'cogs.{cog}'.replace('.py', '') for cog in os.listdir(folder_path) if cog not in
+        return [f'cogs.{cog}'.replace('.py', '') for cog in os.listdir(cogs_path) if cog not in
                                                                                         StartupExtension().blacklist]
 
 

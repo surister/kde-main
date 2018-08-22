@@ -2,5 +2,5 @@
 
 class Login:
 
-    dev = 'NDQ2NzE4NDAzMjk0NTI3NDk5.DgMFLA.HTKDaxMMwUaRS49D4znianopPBk'
-    kde = 'NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg'
+    dev = 'censored'
+    kde = 'censored'

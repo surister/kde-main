@@ -898,5 +898,65 @@
       "steam_id": "",
       "lan": "ES",
       "ok": false
+   },
+   "Latas": {
+      "steam_id": 76561198361000611,
+      "lan": "ES",
+      "ok": true
+   },
+   "Neki": {
+      "steam_id": "",
+      "lan": "ES",
+      "ok": false
+   },
+   "Houtblokje": {
+      "steam_id": "",
+      "lan": "EN",
+      "ok": false
+   },
+   "OneFatPie": {
+      "steam_id": 76561198088105639,
+      "lan": "EN",
+      "ok": true
+   },
+   "Del Pino": {
+      "steam_id": 76561198261891692,
+      "lan": "ES",
+      "ok": true
+   },
+   "Klaus": {
+      "steam_id": 76561198305248932,
+      "lan": "EN",
+      "ok": true
+   },
+   ">>>MoJiN<<<": {
+      "steam_id": "",
+      "lan": "ES",
+      "ok": false
+   },
+   "personifiedslump": {
+      "steam_id": 76561198346393681,
+      "lan": "ES",
+      "ok": true
+   },
+   "Secreto007": {
+      "steam_id": "",
+      "lan": "ES",
+      "ok": false
+   },
+   "w1ss": {
+      "steam_id": 76561198077941976,
+      "lan": "EN",
+      "ok": true
+   },
+   "WiKi's": {
+      "steam_id": 76561198201752551,
+      "lan": "ES",
+      "ok": true
+   },
+   "RiPPeR": {
+      "steam_id": "",
+      "lan": "ES",
+      "ok": false
    }
 }

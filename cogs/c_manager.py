@@ -4,6 +4,7 @@ from discord.ext import commands
 
 from Bot.KDE.cogs_manager import load_cogs, unload_cogs
 
+
 class CogManager:
 
     def __init__(self, bot):

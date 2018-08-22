@@ -6,3 +6,5 @@
 *.venv/
 venv/
 /venv
+database.json
+*.json

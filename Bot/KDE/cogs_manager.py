@@ -1,6 +1,5 @@
 import os
 
-
 from Bot.KDE.paths import cogs_path
 
 
@@ -32,4 +31,3 @@ def unload_cogs(instance):
             instance.unload_extension(extension)
         except Exception as e:
             print(e)
-

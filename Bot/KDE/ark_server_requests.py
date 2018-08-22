@@ -32,7 +32,7 @@ def main(server: str, status=False):
     parser.feed(ark_users(server))
 
     if status:
-        return f'Server {list(kde_servers.keys())[list(kde_servers.values()).index(server)]} status -> ' \
+        return f'Server __**{list(kde_servers.keys())[list(kde_servers.values()).index(server)]}**__ status -> ' \
                f'{parser.container[97]}'
     else:
         for key, value in list(parser.container.items()):
@@ -65,11 +65,3 @@ def cant_jugadores():
     c = " ".join(b)
 
     return sum([int(s) for s in c.split() if s.isdigit()])
-
-
-def server_check():
-    x = []
-    for i in kde_servers.values():
-        for k in main(i):
-            if 'Server vacio'in k or 'Online Players' in k:
-                x.append(k)

@@ -29,18 +29,9 @@ class Mod:
     def __init__(self, bot):
         self.bot = bot
 
-    @asdf
-    async def msg_help(self):
-        await self.bot.say('nibba')
-
-    @commands.command(pass_context=True)
-    @deco()
-    async def test(self):
-        cn = ['476475717849317399', '476475751084851232']
-        for i in cn:
-
-            await self.bot.send_message(self.bot.get_channel(i), 'setting up')
-        # await self.bot.get_message(self.bot.get_channel('476475717849317399'), )
+    @commands.command()
+    async def df(self):
+        self.bot.say('s')
 
     @commands.command()
     async def v(self, arg):

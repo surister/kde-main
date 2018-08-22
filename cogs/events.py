@@ -5,6 +5,7 @@ from time import time
 from discord import Member, Embed, Game
 from discord.ext import commands
 from discord.utils import find
+from discord.errors import InvalidArgument
 
 from Bot.KDE.constants import *
 from Bot.KDE.constants import __version__
@@ -62,12 +63,11 @@ class OnMessageVariable:
 
     async def on_message(self, message):
         if message.channel == self.bot.get_channel("462267741152346112"):
-
             b = str_to_dic(message.content)
             final_switcher = switcher_wh(b)
             server = server_wh(b)
             time = strftime('%I:%M%p %z on %b %d %Y')
-
+            fmt = ''
             if final_switcher == '1':
                 fmt = (server, info_switcher_wh(b)[1], info_switcher_wh(b)[0], time)
             if final_switcher == '2':
@@ -82,9 +82,12 @@ class OnMessageVariable:
                 fmt = (server, time)
 
             for discord_users in get_attacked_users(players_wh(b), get_json()):
-
-                await self.bot.send_message(message.server.get_member_named(discord_users),
-                                            wb_msg[read_arg(discord_users, 'lan')][switcher_wh(b)].format(*fmt))
+                try:
+                    await self.bot.send_message(message.server.get_member_named(discord_users),
+                                                wb_msg[read_arg(discord_users, 'lan')][switcher_wh(b)].format(*fmt))
+                except InvalidArgument:
+                    pass
+        # con el try aqui evitamos que si el usuario ha dejado el discord no sale el error uqe joda la cadena de mensajes
 
     async def steam_message(self, user, lan):
         embed = Embed(title=welcome[lan], color=0x4FBCF3)
