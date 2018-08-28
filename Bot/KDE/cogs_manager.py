@@ -13,11 +13,8 @@ class StartupExtension:
                                                                                         StartupExtension().blacklist]
 
 
-startup_list = StartupExtension.to_array()
-
-
 def load_cogs(instance):
-    for extension in startup_list:
+    for extension in StartupExtension.to_array():
         try:
             instance.load_extension(extension)
         except Exception as e:
