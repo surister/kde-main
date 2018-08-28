@@ -33,7 +33,7 @@ def steam_id_format_check(id_steam):
 def steam_64id(id_steam: str):
     if steam_id_format_check(id_steam):
         return int(id_steam)
-    key = "F178A3511A0D8E8D5C6C5697250B5554"
+    key = os.environ['STEAM_API_KEY']
     url = "https://api.steampowered.com/ISteamUser/ResolveVanityURL/" \
           "v1/?key={0}&vanityurl={1}".format(key, id_steam)
     response = requests.get(url)
