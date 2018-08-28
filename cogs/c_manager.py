@@ -21,3 +21,4 @@ class CogManager:
 
 def setup(bot):
     bot.add_cog(CogManager(bot))
+
