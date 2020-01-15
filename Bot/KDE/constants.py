@@ -7,7 +7,7 @@ __date__ = strftime('%c')
 __last_feature__ = "Todo full docstring, mejorado sistema de login y carga de cogs + core para server status" + __date__
 
 
-ids = {"token": "NDYwODQ5OTMzMTE3ODE2ODQ3.DhKw-A.ZktmEN8cITd_4RkJ340eTmyXWFg",
+ids = {"token": "token",
        "recepcion": "461112442185973760"}
 
 disc_message_1 = {1: "__**¡Buenas!, para ayudarnos a ayudarte, necesitamos que nos facilites tu steam id.**__", 2: "__**Hey there! In "
